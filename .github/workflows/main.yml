@@ -20,6 +20,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 30
+          build-tools: 30.0.3
+
       - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
 
