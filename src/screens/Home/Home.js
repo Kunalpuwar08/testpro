@@ -26,10 +26,10 @@ const Home = () => {
 
   const renderCard = ({ item, index }) => {
     return (
-      <TouchableOpacity key={index}>
-        <Text>{item?.name}</Text>
-        <TouchableOpacity onPress={() => addToCart(item)}>
-          <Text>Add to cart</Text>
+      <TouchableOpacity style={styles.card} key={index}>
+        <Text style={styles.cardTxt}>{item?.name}</Text>
+        <TouchableOpacity style={styles.cardBtn} onPress={() => addToCart(item)}>
+          <Text style={styles.cardBtnTxt}>Add to cart</Text>
         </TouchableOpacity>
       </TouchableOpacity>
     )
@@ -38,11 +38,12 @@ const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ width: '90%', alignSelf: 'center' }}>
-        <Text>List Of Data</Text>
+        <Text style={styles.heading}>List Of Data</Text>
 
         <FlatList
           data={listOfData}
           renderItem={renderCard}
+          keyExtractor={(i, e) => e}
         />
       </View>
     </SafeAreaView>
@@ -55,5 +56,37 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
+  },
+  heading: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000'
+  },
+  card: {
+    width: '90%',
+    alignSelf: 'center',
+    height: 80,
+    padding: 8,
+    margin: 6,
+    borderWidth: 1,
+    borderRadius: 12
+  },
+  cardTxt: {
+    color: '#000',
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  cardBtn: {
+    width: '100%',
+    height: 40,
+    padding: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'purple'
+  },
+  cardBtnTxt: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold'
   }
 })
