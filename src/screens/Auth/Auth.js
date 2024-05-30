@@ -1,20 +1,27 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
-import CInput from '../../components/CInput'
-import MyButton from '../../components/MyButton'
-import { useNavigation } from '@react-navigation/native'
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
+import CInput from '../../components/CInput';
+import MyButton from '../../components/MyButton';
+import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 
 const Auth = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onLogin = () => {
     try {
-      auth().signInWithEmailAndPassword(email, password)
+      auth()
+        .signInWithEmailAndPassword(email, password)
         .then(() => {
-          navigation.navigate('Home')
+          navigation.navigate('Home');
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
@@ -38,38 +45,51 @@ const Auth = () => {
         <Text style={styles.heading}>My APP</Text>
 
         <View style={styles.inputView}>
-          <CInput placeholder={'Enter Your Email'} value={email} onChange={txt => setEmail(txt)} />
-          <CInput placeholder={'Enter Your Password'} value={password} onChange={txt => setPassword(txt)} />
+          <CInput
+            placeholder={'Enter Your Email'}
+            value={email}
+            onChange={txt => setEmail(txt)}
+          />
+          <CInput
+            placeholder={'Enter Your Password'}
+            value={password}
+            onChange={txt => setPassword(txt)}
+          />
           <MyButton onPress={onLogin} title={'Login'} />
           <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-            <Text>Don't have an account</Text>
+            <Text style={{textAlign: 'center', margin: 8, color: 'blue'}}>
+              Don't have an account? click here
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Auth
+export default Auth;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   mainView: {
     width: '90%',
-    height: '80%',
-    margin: 12
+    height: '50%',
+    margin: 12,
   },
   heading: {
-    fontSize: 16,
-    fontWeight: 'bold'
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   inputView: {
     width: '90%',
     alignSelf: 'center',
     height: 'auto',
-    padding: 8
-  }
-})
+    padding: 8,
+  },
+});

@@ -1,9 +1,16 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
-import { addCart } from '../../redux/slices/userSlice';
+import {useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {addCart} from '../../redux/slices/userSlice';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -12,81 +19,109 @@ const Home = () => {
 
   useEffect(() => {
     try {
-      axios.get("https://api.restful-api.dev/objects")
+      axios
+        .get('https://api.restful-api.dev/objects')
         .then(res => setListOfData(res.data))
-        .catch(err => console.log(err))
+        .catch(err => console.log(err));
     } catch (error) {
       console.log(error);
     }
-  }, [])
+  }, []);
 
-  const addToCart = (item) => {
+  const addToCart = item => {
     dispatch(addCart(item));
   };
 
-  const renderCard = ({ item, index }) => {
+  const renderCard = ({item, index}) => {
     return (
       <TouchableOpacity style={styles.card} key={index}>
         <Text style={styles.cardTxt}>{item?.name}</Text>
-        <TouchableOpacity style={styles.cardBtn} onPress={() => addToCart(item)}>
+        <TouchableOpacity
+          style={styles.cardBtn}
+          onPress={() => addToCart(item)}>
           <Text style={styles.cardBtnTxt}>Add to cart</Text>
         </TouchableOpacity>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ width: '90%', alignSelf: 'center' }}>
+      <View style={styles.mainView}>
         <Text style={styles.heading}>List Of Data</Text>
 
         <FlatList
           data={listOfData}
           renderItem={renderCard}
           keyExtractor={(i, e) => e}
+          showsVerticalScrollIndicator={false}
         />
       </View>
+      <TouchableOpacity
+        style={styles.floatBtn}
+        onPress={() => navigation.navigate('Cart')}>
+        <Text style={{color: '#000'}}>cart</Text>
+      </TouchableOpacity>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+  },
+  mainView: {
+    width: '90%',
+    alignSelf: 'center',
+    margin: 8,
   },
   heading: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000'
+    color: '#000',
+    marginBottom: 12,
   },
   card: {
     width: '90%',
     alignSelf: 'center',
-    height: 80,
+    height: 100,
     padding: 8,
     margin: 6,
     borderWidth: 1,
-    borderRadius: 12
+    borderRadius: 12,
   },
   cardTxt: {
     color: '#000',
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 16,
+    height: '50%',
   },
   cardBtn: {
     width: '100%',
-    height: 40,
+    height: '50%',
     padding: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'purple'
+    backgroundColor: 'purple',
   },
   cardBtnTxt: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: 'bold'
-  }
-})
+    fontWeight: 'bold',
+  },
+  floatBtn: {
+    height: 50,
+    width: 50,
+    borderRadius: 25,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 20,
+    right: 10,
+    elevation: 5,
+  },
+});

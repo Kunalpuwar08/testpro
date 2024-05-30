@@ -17,8 +17,10 @@
 "@babel/compat-data@^7.20.5", "@babel/compat-data@^7.22.6", "@babel/compat-data@^7.24.6":
   version "7.24.6"
 
-"@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.0.0-0 || ^8.0.0-0 <8.0.0", "@babel/core@^7.11.0", "@babel/core@^7.11.6", "@babel/core@^7.12.0", "@babel/core@^7.12.3", "@babel/core@^7.13.0", "@babel/core@^7.13.16", "@babel/core@^7.20.0", "@babel/core@^7.23.9", "@babel/core@^7.4.0 || ^8.0.0-0 <8.0.0", "@babel/core@^7.8.0":
+"@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.0.0-0 || ^8.0.0-0 <8.0.0", "@babel/core@^7.11.0", "@babel/core@^7.11.6", "@babel/core@^7.12.0", "@babel/core@^7.12.3", "@babel/core@^7.13.0", "@babel/core@^7.13.16", "@babel/core@^7.20.0", "@babel/core@^7.23.9", "@babel/core@^7.24.6", "@babel/core@^7.4.0 || ^8.0.0-0 <8.0.0", "@babel/core@^7.8.0":
   version "7.24.6"
+  resolved "https://registry.npmjs.org/@babel/core/-/core-7.24.6.tgz"
+  integrity sha512-qAHSfAdVyFmIvl0VHELib8xar7ONuSHrE2hLnsaWkYNTI68dmi1x8GYDhJjMI/e7XWal9QBlZkwbOnkcw7Z8gQ==
   dependencies:
     "@ampproject/remapping" "^2.2.0"
     "@babel/code-frame" "^7.24.6"
@@ -642,10 +644,17 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.6"
 
-"@babel/plugin-transform-react-display-name@^7.0.0":
+"@babel/plugin-transform-react-display-name@^7.0.0", "@babel/plugin-transform-react-display-name@^7.24.6":
   version "7.24.6"
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.6"
+
+"@babel/plugin-transform-react-jsx-development@^7.24.6":
+  version "7.24.6"
+  resolved "https://registry.npmjs.org/@babel/plugin-transform-react-jsx-development/-/plugin-transform-react-jsx-development-7.24.6.tgz"
+  integrity sha512-F7EsNp5StNDouSSdYyDSxh4J+xvj/JqG+Cb6s2fA+jCyHOzigG5vTwgH8tU2U8Voyiu5zCG9bAK49wTr/wPH0w==
+  dependencies:
+    "@babel/plugin-transform-react-jsx" "^7.24.6"
 
 "@babel/plugin-transform-react-jsx-self@^7.0.0":
   version "7.24.6"
@@ -657,7 +666,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.6"
 
-"@babel/plugin-transform-react-jsx@^7.0.0":
+"@babel/plugin-transform-react-jsx@^7.0.0", "@babel/plugin-transform-react-jsx@^7.24.6":
   version "7.24.6"
   dependencies:
     "@babel/helper-annotate-as-pure" "^7.24.6"
@@ -665,6 +674,14 @@
     "@babel/helper-plugin-utils" "^7.24.6"
     "@babel/plugin-syntax-jsx" "^7.24.6"
     "@babel/types" "^7.24.6"
+
+"@babel/plugin-transform-react-pure-annotations@^7.24.6":
+  version "7.24.6"
+  resolved "https://registry.npmjs.org/@babel/plugin-transform-react-pure-annotations/-/plugin-transform-react-pure-annotations-7.24.6.tgz"
+  integrity sha512-0HoDQlFJJkXRyV2N+xOpUETbKHcouSwijRQbKWVtxsPoq5bbB30qZag9/pSc5xcWVYjTHlLsBsY+hZDnzQTPNw==
+  dependencies:
+    "@babel/helper-annotate-as-pure" "^7.24.6"
+    "@babel/helper-plugin-utils" "^7.24.6"
 
 "@babel/plugin-transform-regenerator@^7.24.6":
   version "7.24.6"
@@ -744,8 +761,10 @@
     "@babel/helper-create-regexp-features-plugin" "^7.24.6"
     "@babel/helper-plugin-utils" "^7.24.6"
 
-"@babel/preset-env@^7.1.6", "@babel/preset-env@^7.20.0":
+"@babel/preset-env@^7.1.6", "@babel/preset-env@^7.24.6":
   version "7.24.6"
+  resolved "https://registry.npmjs.org/@babel/preset-env/-/preset-env-7.24.6.tgz"
+  integrity sha512-CrxEAvN7VxfjOG8JNF2Y/eMqMJbZPZ185amwGUBp8D9USK90xQmv7dLdFSa+VbD7fdIqcy/Mfv7WtzG8+/qxKg==
   dependencies:
     "@babel/compat-data" "^7.24.6"
     "@babel/helper-compilation-targets" "^7.24.6"
@@ -842,6 +861,18 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
+
+"@babel/preset-react@^7.24.6":
+  version "7.24.6"
+  resolved "https://registry.npmjs.org/@babel/preset-react/-/preset-react-7.24.6.tgz"
+  integrity sha512-8mpzh1bWvmINmwM3xpz6ahu57mNaWavMm+wBNjQ4AFu1nghKBiIRET7l/Wmj4drXany/BBGjJZngICcD98F1iw==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.24.6"
+    "@babel/helper-validator-option" "^7.24.6"
+    "@babel/plugin-transform-react-display-name" "^7.24.6"
+    "@babel/plugin-transform-react-jsx" "^7.24.6"
+    "@babel/plugin-transform-react-jsx-development" "^7.24.6"
+    "@babel/plugin-transform-react-pure-annotations" "^7.24.6"
 
 "@babel/preset-typescript@^7.13.0":
   version "7.24.6"
@@ -2000,8 +2031,10 @@ axios@^1.7.2:
 babel-core@^7.0.0-bridge.0:
   version "7.0.0-bridge.0"
 
-babel-jest@^29.6.3, babel-jest@^29.7.0:
+babel-jest@^29.7.0:
   version "29.7.0"
+  resolved "https://registry.npmjs.org/babel-jest/-/babel-jest-29.7.0.tgz"
+  integrity sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==
   dependencies:
     "@jest/transform" "^29.7.0"
     "@types/babel__core" "^7.1.14"
