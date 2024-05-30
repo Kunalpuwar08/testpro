@@ -1,10 +1,7 @@
-name: Build APK
+name: Build Android Release
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
     branches:
       - master
 
@@ -13,14 +10,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11.0.21+9'
-        distribution: 'adopt'
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
 
-    - name: Build with Gradle
-      run: ./gradlew assembleRelease
+      - name: Build release APK
+        run: |
+          cd android
+          ./gradlew assembleRelease
