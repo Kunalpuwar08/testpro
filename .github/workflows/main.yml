@@ -16,10 +16,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up JDK 1.8
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
-        java-version: '11.0.23+9'
+        java-version: '11.0.21+9'
 
     - name: Build with Gradle
       run: ./gradlew assembleRelease
