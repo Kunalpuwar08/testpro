@@ -8,16 +8,26 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {clearCart} from '../../redux/slices/userSlice';
+import {clearCart, deleteCartItem} from '../../redux/slices/userSlice';
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cartData = useSelector(state => state.cart.cartData);
+
+  const removeFromCart = (item) =>{
+    dispatch(deleteCartItem(item));
+  }
+
   const renderCard = ({item, index}) => {
     return (
-      <View style={styles.card} key={index}>
-        <Text style={styles.cardTxt}>{item.name}</Text>
-      </View>
+      <TouchableOpacity style={styles.card} key={index}>
+      <Text style={styles.cardTxt}>{item?.name}</Text>
+      <TouchableOpacity
+        style={styles.cardBtn}
+        onPress={() => removeFromCart(item)}>
+        <Text style={styles.cardBtnTxt}>remove</Text>
+      </TouchableOpacity>
+    </TouchableOpacity>
     );
   };
   return (
@@ -70,15 +80,31 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   card: {
-    padding: 8,
-    height: 50,
     width: '90%',
-    borderWidth: 1,
     alignSelf: 'center',
-    margin: 8,
-    borderRadius: 8,
+    height: 100,
+    padding: 8,
+    margin: 6,
+    borderWidth: 1,
+    borderRadius: 12,
   },
   cardTxt: {
     color: '#000',
+    fontWeight: 'bold',
+    fontSize: 16,
+    height: '50%',
+  },
+  cardBtn: {
+    width: '100%',
+    height: '50%',
+    padding: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'red',
+  },
+  cardBtnTxt: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
