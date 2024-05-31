@@ -1,34 +1,27 @@
-import React from 'react';
-import {render, fireEvent} from '@testing-library/react-native';
-import {Provider} from 'react-redux';
 import {configureStore} from '@reduxjs/toolkit';
+import {fireEvent, render} from '@testing-library/react-native';
+import React from 'react';
+import {Provider} from 'react-redux';
 import userSlice from '../src/redux/slices/userSlice';
 import Cart from '../src/screens/Cart/Cart';
 
 describe('Cart component', () => {
-  it('should render correctly', () => {
-    const store = configureStore({
-      reducer: {
-        cart: cartReducer,
-      },
-    });
+  const store = configureStore({
+    reducer: {
+      cart: userSlice,
+    },
+  });
 
+  it('should render correctly', () => {
     const {getByText} = render(
       <Provider store={store}>
-        <Cart />
+        <Cart />,
       </Provider>,
     );
-
     expect(getByText('Cart List')).toBeTruthy();
   });
 
   it('should clear the cart when the clear button is pressed', () => {
-    const store = configureStore({
-      reducer: {
-        cart: userSlice,
-      },
-    });
-
     store.dispatch({
       type: 'cart/addToCart',
       payload: {id: 1, name: 'Test Item'},
@@ -36,7 +29,7 @@ describe('Cart component', () => {
 
     const {getByText} = render(
       <Provider store={store}>
-        <Cart />
+        <Cart />,
       </Provider>,
     );
 

@@ -37,6 +37,7 @@ const Home = () => {
       <TouchableOpacity style={styles.card} key={index}>
         <Text style={styles.cardTxt}>{item?.name}</Text>
         <TouchableOpacity
+          testID={`add-to-cart-button-${index}`}
           style={styles.cardBtn}
           onPress={() => addToCart(item)}>
           <Text style={styles.cardBtnTxt}>Add to cart</Text>

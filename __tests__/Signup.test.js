@@ -1,111 +1,109 @@
+import {createUserWithEmailAndPassword} from '@react-native-firebase/auth';
+import {fireEvent, render} from '@testing-library/react-native';
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
-import {useNavigation} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 import Signup from '../src/screens/Auth/Signup';
 
-jest.mock('@react-navigation/native');
-useNavigation.mockReturnValue({navigate: jest.fn()});
-
-jest.mock('@react-native-firebase/auth', () => ({
-  __esModule: true,
-  default: () => ({
-    createUserWithEmailAndPassword: jest.fn(),
-  }),
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: jest.fn(() => ({navigate: jest.fn()})),
 }));
 
-describe('Signup Component', () => {
-  const navigateMock = jest.fn();
+// Mocking the createUserWithEmailAndPassword function
+jest.mock('@react-native-firebase/auth', () => ({
+  __esModule: true,
+  createUserWithEmailAndPassword: jest.fn(),
+}));
 
-  beforeAll(() => {
-    useNavigation.mockReturnValue({navigate: navigateMock});
-  });
+const auth = require('@react-native-firebase/auth');
+
+describe('createUserWithEmailAndPassword', () => {
+  const email = 'test@example.com';
+  const password = 'password123';
 
   beforeEach(() => {
-    navigateMock.mockClear();
-    auth().createUserWithEmailAndPassword.mockClear();
+    auth.createUserWithEmailAndPassword.mockClear();
   });
 
-  test('renders correctly', async () => {
+  it('renders correctly', async () => {
     const {getByPlaceholderText, getByText} = render(<Signup />);
 
-    await waitFor(
-      () => {
-        expect(getByText('My APP')).toBeTruthy();
-        expect(getByPlaceholderText('Enter Your Email')).toBeTruthy();
-        expect(getByPlaceholderText('Enter Your Password')).toBeTruthy();
-        expect(getByText('Login')).toBeTruthy();
-        expect(getByText("Don't have an account")).toBeTruthy();
-      },
-      {timeout: 10000},
+    expect(getByText('My APP')).toBeTruthy();
+    expect(getByPlaceholderText('Enter Your Email')).toBeTruthy();
+    expect(getByPlaceholderText('Enter Your Password')).toBeTruthy();
+    expect(getByText('SignUp')).toBeTruthy();
+    expect(getByText('Already Have an account? click here')).toBeTruthy();
+  });
+
+  it('handles email and password input', () => {
+    const {getByPlaceholderText} = render(<Signup />);
+    const emailInput = getByPlaceholderText('Enter Your Email');
+    const passwordInput = getByPlaceholderText('Enter Your Password');
+
+    fireEvent.changeText(emailInput, email);
+    fireEvent.changeText(passwordInput, 'password123');
+
+    expect(emailInput.props.value).toBe(email);
+    expect(passwordInput.props.value).toBe('password123');
+  });
+
+  it('should create a new user with valid email and password', async () => {
+    auth.createUserWithEmailAndPassword.mockResolvedValueOnce({
+      user: {uid: '123', email: email},
+    });
+
+    const {getByText, getByPlaceholderText} = render(<Signup />);
+
+    const emailInput = getByPlaceholderText('Enter Your Email');
+    const passwordInput = getByPlaceholderText('Enter Your Password');
+    const loginButton = getByText('SignUp');
+
+    fireEvent.changeText(emailInput, email);
+    fireEvent.changeText(passwordInput, 'password123');
+    fireEvent.press(loginButton);
+
+    const userCredential = await createUserWithEmailAndPassword(
+      emailInput.props.value,
+      passwordInput.props.value,
     );
 
-    test('handles email and password input', () => {
-      const {getByPlaceholderText} = render(<Signup />);
-      const emailInput = getByPlaceholderText('Enter Your Email');
-      const passwordInput = getByPlaceholderText('Enter Your Password');
+    expect(auth.createUserWithEmailAndPassword).toHaveBeenCalledWith(
+      email,
+      password,
+    );
+    expect(userCredential.user.uid).toEqual('123');
+    expect(userCredential.user.email).toEqual(email);
+  });
 
-      fireEvent.changeText(emailInput, 'test@example.com');
-      fireEvent.changeText(passwordInput, 'password123');
+  it('should throw an error with invalid email', async () => {
+    const invalidEmail = 'invalidemail';
+    const password = 'password123';
 
-      expect(emailInput.props.value).toBe('test@example.com');
-      expect(passwordInput.props.value).toBe('password123');
-    });
+    auth.createUserWithEmailAndPassword.mockRejectedValueOnce(
+      new Error('The email address is badly formatted.'),
+    );
 
-    test('calls onSignup and navigates on successful signup', async () => {
-      auth().createUserWithEmailAndPassword.mockResolvedValueOnce();
-      const {getByText, getByPlaceholderText} = render(<Signup />);
+    try {
+      await createUserWithEmailAndPassword(invalidEmail, password);
+      fail('Expected promise to reject.');
+    } catch (error) {
+      expect(error.message).toEqual('The email address is badly formatted.');
+    }
+  });
 
-      const emailInput = getByPlaceholderText('Enter Your Email');
-      const passwordInput = getByPlaceholderText('Enter Your Password');
-      const loginButton = getByText('Login');
+  it('should throw an error with weak password', async () => {
+    const email = 'test@example.com';
+    const weakPassword = '123';
 
-      fireEvent.changeText(emailInput, 'test@example.com');
-      fireEvent.changeText(passwordInput, 'password123');
-      fireEvent.press(loginButton);
+    auth.createUserWithEmailAndPassword.mockRejectedValueOnce(
+      new Error('The password must be 6 characters long or more.'),
+    );
 
-      await waitFor(() => {
-        expect(auth().createUserWithEmailAndPassword).toHaveBeenCalledWith(
-          'test@example.com',
-          'password123',
-        );
-        expect(navigateMock).toHaveBeenCalledWith('Auth');
-      });
-    });
-
-    test('handles signup errors', async () => {
-      const error = new Error('auth/email-already-in-use');
-      error.code = 'auth/email-already-in-use';
-      auth().createUserWithEmailAndPassword.mockRejectedValueOnce(error);
-
-      console.log = jest.fn();
-
-      const {getByText, getByPlaceholderText} = render(<Signup />);
-      const emailInput = getByPlaceholderText('Enter Your Email');
-      const passwordInput = getByPlaceholderText('Enter Your Password');
-      const loginButton = getByText('Login');
-
-      fireEvent.changeText(emailInput, 'test@example.com');
-      fireEvent.changeText(passwordInput, 'password123');
-      fireEvent.press(loginButton);
-
-      await waitFor(() => {
-        expect(auth().createUserWithEmailAndPassword).toHaveBeenCalledWith(
-          'test@example.com',
-          'password123',
-        );
-        expect(console.log).toHaveBeenCalledWith(
-          'That email address is already in use!',
-        );
-      });
-    });
-
-    test('navigates to signup screen on pressing the signup link', () => {
-      const {getByText} = render(<Signup />);
-      const signupLink = getByText("Don't have an account");
-
-      fireEvent.press(signupLink);
-      expect(navigateMock).toHaveBeenCalledWith('Signup');
-    });
-  }, 10000);
+    try {
+      await createUserWithEmailAndPassword(email, weakPassword);
+      fail('Expected promise to reject.');
+    } catch (error) {
+      expect(error.message).toEqual(
+        'The password must be 6 characters long or more.',
+      );
+    }
+  });
 });

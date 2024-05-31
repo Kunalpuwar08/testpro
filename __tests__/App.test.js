@@ -4,8 +4,8 @@ import App from '../App';
 
 describe('App component', () => {
   it('renders correctly', () => {
-    const {getByTestId} = render(<App />);
+    const {getByText} = render(<App />);
 
-    expect(getByTestId('app-navigation')).toBeTruthy();
+    expect(getByText('List Of Data')).toBeTruthy();
   });
 });

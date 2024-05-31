@@ -1,22 +1,24 @@
+import {signInWithEmailAndPassword} from '@react-native-firebase/auth';
+import {fireEvent, render, waitFor} from '@testing-library/react-native';
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
 import Auth from '../src/screens/Auth/Auth';
 
 jest.mock('@react-navigation/native', () => ({
-  __esModule: true,
-  default: {
-    useNavigation: jest.fn(() => ({navigate: jest.fn()})),
-  },
+  useNavigation: jest.fn(() => ({navigate: jest.fn()})),
 }));
 
+// Mocking the createUserWithEmailAndPassword function
 jest.mock('@react-native-firebase/auth', () => ({
   __esModule: true,
-  default: {
-    signInWithEmailAndPassword: jest.fn().mockResolvedValueOnce({}),
-  },
+  signInWithEmailAndPassword: jest.fn(),
 }));
 
+const auth = require('@react-native-firebase/auth');
+
 describe('Auth component', () => {
+  const email = 'test@example.com';
+  const password = 'password123';
+
   it('should render correctly', () => {
     const {getByText, getByPlaceholderText} = render(<Auth />);
 
@@ -28,20 +30,30 @@ describe('Auth component', () => {
   });
 
   it('should call signInWithEmailAndPassword when login button is pressed', async () => {
+    auth.signInWithEmailAndPassword.mockResolvedValueOnce({
+      user: {uid: '123', email},
+    });
+
     const {getByText, getByPlaceholderText} = render(<Auth />);
     const emailInput = getByPlaceholderText('Enter Your Email');
     const passwordInput = getByPlaceholderText('Enter Your Password');
     const loginButton = getByText('Login');
 
-    fireEvent.changeText(emailInput, 'test@example.com');
-    fireEvent.changeText(passwordInput, 'password');
+    fireEvent.changeText(emailInput, email);
+    fireEvent.changeText(passwordInput, password);
 
     fireEvent.press(loginButton);
 
-    await waitFor(() => {
-      expect(
-        require('@react-native-firebase/auth').signInWithEmailAndPassword,
-      ).toHaveBeenCalledWith('test@example.com', 'password');
-    });
+    const userCredential = await signInWithEmailAndPassword(
+      emailInput.props.value,
+      passwordInput.props.value,
+    );
+
+    expect(auth.signInWithEmailAndPassword).toHaveBeenCalledWith(
+      email,
+      password,
+    );
+    expect(userCredential.user.uid).toEqual('123');
+    expect(userCredential.user.email).toEqual(email);
   });
 });

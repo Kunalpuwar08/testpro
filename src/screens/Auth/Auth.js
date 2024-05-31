@@ -1,3 +1,6 @@
+import auth from '@react-native-firebase/auth';
+import {useNavigation} from '@react-navigation/native';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -5,11 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
 import CInput from '../../components/CInput';
 import MyButton from '../../components/MyButton';
-import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 
 const Auth = () => {
   const navigation = useNavigation();
@@ -38,8 +38,8 @@ const Auth = () => {
       console.error(error);
     }
   };
-  const onGoogleLogin = () => { };
-  const onMicroLogin = () => { }
+  const onGoogleLogin = () => {};
+  const onMicroLogin = () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,14 +59,13 @@ const Auth = () => {
           />
           <MyButton onPress={onLogin} title={'Login'} />
           <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-            <Text style={{ textAlign: 'center', margin: 8, color: 'blue' }}>
+            <Text style={{textAlign: 'center', margin: 8, color: 'blue'}}>
               Don't have an account? click here
             </Text>
           </TouchableOpacity>
 
           <MyButton onPress={onGoogleLogin} title={'Login with Google'} />
           <MyButton onPress={onMicroLogin} title={'Login with Microsoft'} />
-
         </View>
       </View>
     </SafeAreaView>
